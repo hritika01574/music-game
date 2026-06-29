@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Indian Classical Music Word Search</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Music Word Search</title>
     <style>
         :root {
             --primary-color: #4a148c;
@@ -13,160 +13,201 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
             margin: 0;
-            padding: 20px;
+            padding: 10px;
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            box-sizing: border-box;
         }
 
         h1 {
             color: var(--primary-color);
-            margin-bottom: 5px;
+            margin: 5px 0 2px 0;
+            font-size: 26px;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
+            text-align: center;
         }
 
         h2 {
             color: var(--secondary-color);
-            margin-top: 0;
-            font-weight: 400;
+            margin: 0 0 15px 0;
+            font-size: 13px;
+            font-weight: 500;
+            text-align: center;
+            max-width: 90%;
         }
 
         .level-select {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
+            display: flex;
+            gap: 12px;
         }
 
         button {
             background-color: var(--primary-color);
             color: white;
             border: none;
-            padding: 10px 20px;
-            font-size: 16px;
+            padding: 10px 24px;
+            font-size: 14px;
             cursor: pointer;
-            border-radius: 5px;
-            margin: 0 10px;
-            transition: background 0.3s;
-        }
-
-        button:hover {
-            background-color: var(--secondary-color);
+            border-radius: 20px;
+            font-weight: bold;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
         button.active {
             background-color: #00e676;
             color: #000;
-            font-weight: bold;
         }
 
         .game-container {
             display: flex;
-            flex-wrap: wrap;
-            gap: 40px;
-            justify-content: center;
-            max-width: 1000px;
+            flex-direction: row;
+            align-items: flex-start;
+            gap: 25px;
             background: white;
-            padding: 30px;
-            border-radius: 15px;
+            padding: 20px;
+            border-radius: 16px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            max-width: 95%;
+            box-sizing: border-box;
         }
 
         .grid-container {
             user-select: none;
+            -webkit-user-select: none;
+            touch-action: none;
         }
 
         .grid {
             display: grid;
             gap: 2px;
-            background-color: #ccc;
+            background-color: #ddd;
             border: 4px solid var(--primary-color);
             border-radius: 8px;
             padding: 2px;
         }
 
         .cell {
-            width: 35px;
-            height: 35px;
+            width: 34px;
+            height: 34px;
             background-color: white;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
-            font-size: 18px;
+            font-size: 16px;
             cursor: pointer;
-            transition: all 0.1s ease;
+            border-radius: 2px;
+            transition: background-color 0.1s;
         }
 
-        .cell.selected {
-            background-color: #ffeb3b;
-        }
-
-        .cell.found {
-            background-color: #a5d6a7;
-            color: #1b5e20;
-        }
+        .cell.selected { background-color: #ffeb3b !important; }
+        .cell.found { background-color: #a5d6a7 !important; color: #1b5e20; }
 
         .word-list-container {
-            min-width: 250px;
+            width: 200px;
         }
 
         .word-list-container h3 {
-            border-bottom: 2px solid var(--primary-color);
-            padding-bottom: 5px;
+            margin: 0 0 10px 0;
+            font-size: 16px;
             color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 4px;
         }
 
         .word-list {
             list-style: none;
             padding: 0;
+            margin: 0;
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
+            grid-template-columns: 1fr;
+            gap: 6px;
         }
 
         .word-item {
-            font-size: 18px;
-            padding: 5px;
-            font-weight: 500;
+            font-size: 13px;
+            padding: 6px 12px;
+            font-weight: 600;
+            background: #f5f5f5;
+            border-radius: 6px;
+            border-left: 4px solid #ccc;
         }
 
         .word-item.found {
             text-decoration: line-through;
-            color: #888;
-            font-style: italic;
+            color: #aaa;
+            background: #e8e8e8;
+            border-left-color: #a5d6a7;
         }
 
         .win-message {
             display: none;
             color: #2e7d32;
-            font-size: 24px;
+            font-size: 22px;
             font-weight: bold;
-            margin-top: 20px;
+            margin-top: 15px;
             text-align: center;
-            animation: pop 0.5s ease;
         }
 
-        @keyframes pop {
-            0% { transform: scale(0.8); }
-            100% { transform: scale(1); }
+        /* PHONE RESPONSIVENESS */
+        @media (max-width: 650px) {
+            h1 { font-size: 22px; }
+            h2 { font-size: 12px; }
+            
+            .game-container {
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+                padding: 10px;
+                width: 100%;
+            }
+
+            /* Scales down dynamically based on viewport width to fit any phone perfectly */
+            .cell {
+                width: calc(88vw / 15);
+                height: calc(88vw / 15);
+                font-size: 12px;
+            }
+            .grid { gap: 1px; border-width: 3px; }
+
+            .word-list-container { width: 100%; }
+            .word-list {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 4px;
+            }
+            .word-item {
+                font-size: 10px;
+                padding: 5px 2px;
+                text-align: center;
+                border-left: none;
+                border-top: 3px solid #ccc;
+            }
+            .word-item.found { border-top-color: #a5d6a7; }
         }
     </style>
 </head>
 <body>
 
     <h1 id="game-title">RAAG</h1>
-    <h2 id="game-subtitle">Can you find all the Raagas of Praveshika Pratham Level?</h2>
+    <h2 id="game-subtitle">Find the Raagas!</h2>
 
     <div class="level-select">
-        <button id="btn-raag" class="active" onclick="switchLevel('raag')">Level 1: RAAG</button>
-        <button id="btn-taal" onclick="switchLevel('taal')">Level 2: TAAL</button>
+        <button id="btn-raag" class="active" onclick="switchLevel('raag')">RAAG</button>
+        <button id="btn-taal" onclick="switchLevel('taal')">TAAL</button>
     </div>
 
     <div class="game-container">
-        <div class="grid-container">
+        <div class="grid-container" id="grid-container">
             <div id="grid" class="grid"></div>
         </div>
 
@@ -179,55 +220,20 @@
     <div id="win-message" class="win-message">🎉 Level Complete! Wonderful Job! 🎉</div>
 
     <script>
-        // Game Data extracted directly from image_ad997a.png
         const levels = {
             raag: {
                 title: "RAAG",
                 subtitle: "Can you find all the Raagas of Praveshika Pratham Level?",
                 words: ["DURGA", "BHIMPALASI", "DES", "BAGESHREE", "BHOOP", "KHAMAAJ", "KAAFI", "YAMAN"],
                 size: { rows: 15, cols: 15 },
-                // Hardcoded grid representation from image
-                gridText: [
-                    "SMUSLKFWMSPOOHB",
-                    "LTXYAMYIEDOFEOT",
-                    "SAHAAHJMADBILYF",
-                    "AXFAAVULRSUQIPN",
-                    "VIKUNVABBNRRATJ",
-                    "RCGINKUNACVNGDW",
-                    "JLKSBSSUGAIEEAI",
-                    "JPCATWCGERSERHJ",
-                    "ZVBLKCRFSVAZNOP",
-                    "SPRAINOKHAMAAJK",
-                    "NSGPARSFRFICPPB",
-                    "FRIMAYZSERSNNIN",
-                    "DDAIKYLFELQEGNV",
-                    "TYUHCSIDCSZYDGH",
-                    "CLEBRANCJKNHRIR"
-                ]
+                gridText: ["SMUSLKFWMSPOOHB","LTXYAMYIEDOFEOT","SAHAAHJMADBILYF","AXFAAVULRSUQIPN","VIKUNVABBNRRATJ","RCGINKUNACVNGDW","JLKSBSSUGAIEEAI","JPCATWCGERSERHJ","ZVBLKCRFSVAZNOP","SPRAINOKHAMAAJK","NSGPARSFRFICPPB","FRIMAYZSERSNNIN","DDAIKYLFELQEGNV","TYUHCSIDCSZYDGH","CLEBRANCJKNHRIR"]
             },
             taal: {
                 title: "TAAL",
                 subtitle: "Can you find all the Taalas of Praveshika Pratham Level?",
                 words: ["DADRA", "TEENTAAL", "KEHRAVA", "JHAPTAAL", "EKTAAL", "CHAUTAAL"],
                 size: { rows: 15, cols: 15 },
-                // Hardcoded grid representation from image
-                gridText: [
-                    "RMYSCADIINANENZ",
-                    "MSKWSP SHUOLOMLF",
-                    "DADRAQDNAVKGEAL",
-                    "TYMIDOLOXFAEEAY",
-                    "SPREFINPGNLPRTS",
-                    "AAHMDB SYHAALAPJ",
-                    "XAVKSUEPAGKIRAU",
-                    "PANEAMSTRTIAHHO",
-                    "IUVHNRKTEFNABJA",
-                    "YHSRSETGUECVCHI",
-                    "CIKACVRDGNNGAWU",
-                    "LSSVAIJAKEBTEIS",
-                    "VLCAVAZOBZKNAPR",
-                    "LBANKNCIEHRRJAN",
-                    "PLAATUAHCATREJL"
-                ]
+                gridText: ["RMYSCADIINANENZ","MSKWSP SHUOLOMLF","DADRAQDNAVKGEAL","TYMIDOLOXFAEEAY","SPREFINPGNLPRTS","AAHMDB SYHAALAPJ","XAVKSUEPAGKIRAU","PANEAMSTRTIAHHO","IUVHNRKTEFNABJA","YHSRSETGUECVCHI","CIKACVRDGNNGAWU","LSSVAIJAKEBTEIS","VLCAVAZOBZKNAPR","LBANKNCIEHRRJAN","PLAATUAHCATREJL"]
             }
         };
 
@@ -240,6 +246,7 @@
         const gridElement = document.getElementById('grid');
         const wordListElement = document.getElementById('word-list');
         const winMessage = document.getElementById('win-message');
+        const gridContainer = document.getElementById('grid-container');
 
         function initGame() {
             const level = levels[currentLevel];
@@ -247,15 +254,14 @@
             document.getElementById('game-subtitle').innerText = level.subtitle;
             winMessage.style.display = 'none';
             foundWords = [];
+            startCell = null;
+            isSelecting = false;
             
-            // Setup Grid layout
-            gridElement.style.gridTemplateColumns = `repeat(${level.size.cols}, 35px)`;
+            gridElement.style.gridTemplateColumns = `repeat(${level.size.cols}, 1fr)`;
             gridElement.innerHTML = '';
-
-            // Clean data spaces just in case
+            
             const cleanGridText = level.gridText.map(row => row.replace(/\s/g, ''));
 
-            // Render Grid
             for (let r = 0; r < level.size.rows; r++) {
                 for (let c = 0; c < level.size.cols; c++) {
                     const cell = document.createElement('div');
@@ -263,19 +269,26 @@
                     cell.innerText = cleanGridText[r][c] || '';
                     cell.dataset.row = r;
                     cell.dataset.col = c;
-
-                    // Mouse / Touch Event Listeners
-                    cell.addEventListener('mousedown', startSelection);
-                    cell.addEventListener('mouseenter', rollSelection);
+                    
+                    // Universal Click/Tap handler
+                    cell.addEventListener('click', handleCellClick);
+                    
+                    // Desktop mouse drag handlers
+                    cell.addEventListener('mousedown', handleMouseDown);
+                    cell.addEventListener('mouseenter', handleMouseEnter);
+                    
                     gridElement.appendChild(cell);
                 }
             }
 
-            // End selection anywhere on mouse up
-            window.removeEventListener('mouseup', endSelection);
-            window.addEventListener('mouseup', endSelection);
+            window.removeEventListener('mouseup', handleMouseUp);
+            window.addEventListener('mouseup', handleMouseUp);
 
-            // Render Word List
+            // Responsive touch dragging fallback
+            gridContainer.addEventListener('touchstart', handleTouchStart, {passive: false});
+            gridContainer.addEventListener('touchmove', handleTouchMove, {passive: false});
+            gridContainer.addEventListener('touchend', handleTouchEnd, {passive: false});
+
             wordListElement.innerHTML = '';
             level.words.forEach(word => {
                 const li = document.createElement('li');
@@ -286,30 +299,32 @@
             });
         }
 
-        function startSelection(e) {
-            isSelecting = true;
-            startCell = e.target;
-            clearSelection();
-            selectCell(startCell);
+        // TAP-TO-SELECT LOGIC (Perfect for Mobile)
+        function handleCellClick(e) {
+            // If dragging is already happening, skip click processing
+            if (isSelecting && window.matchMedia("(pointer: fine)").matches) return; 
+
+            const clickedCell = e.target;
+            if (!startCell) {
+                startCell = clickedCell;
+                startCell.classList.add('selected');
+                selectedCells.push(startCell);
+            } else {
+                processSelection(clickedCell);
+                checkWordMatch();
+                startCell = null;
+            }
         }
 
-        function rollSelection(e) {
-            if (!isSelecting) return;
-            const currentCell = e.target;
+        function processSelection(currentCell) {
+            if (!currentCell || !startCell) return;
             clearSelection();
 
-            const r1 = parseInt(startCell.dataset.row);
-            const c1 = parseInt(startCell.dataset.col);
-            const r2 = parseInt(currentCell.dataset.row);
-            const c2 = parseInt(currentCell.dataset.col);
+            const r1 = parseInt(startCell.dataset.row), c1 = parseInt(startCell.dataset.col);
+            const r2 = parseInt(currentCell.dataset.row), c2 = parseInt(currentCell.dataset.col);
 
-            // Calculate direction vectors
-            let dr = r2 - r1;
-            let dc = c2 - c1;
-
-            // Normalize to straight lines or diagonals (45 degrees)
+            let dr = r2 - r1, dc = c2 - c1;
             if (dr !== 0 && dc !== 0 && Math.abs(dr) !== Math.abs(dc)) {
-                // If it's erratic tracing, stay on start item until aligned
                 selectCell(startCell);
                 return;
             }
@@ -319,53 +334,88 @@
             const stepC = dc === 0 ? 0 : dc / steps;
 
             for (let i = 0; i <= steps; i++) {
-                const currR = r1 + (i * stepR);
-                const currC = c1 + (i * stepC);
-                const cell = document.querySelector(`[data-row="${currR}"][data-col="${currC}"]`);
+                const cell = document.querySelector(`#grid [data-row="${r1 + (i * stepR)}"][data-col="${c1 + (i * stepC)}"]`);
                 if (cell) selectCell(cell);
             }
         }
 
-        function selectCell(cell) {
-            cell.classList.add('selected');
-            selectedCells.push(cell);
-        }
-
-        function clearSelection() {
-            selectedCells.forEach(cell => cell.classList.remove('selected'));
-            selectedCells = [];
-        }
-
-        function endSelection() {
-            if (!isSelecting) return;
-            isSelecting = false;
-
-            // Compile selected string
+        function checkWordMatch() {
+            if (selectedCells.length === 0) return;
             const selectedWord = selectedCells.map(cell => cell.innerText).join('');
             const reversedWord = selectedWord.split('').reverse().join('');
             const level = levels[currentLevel];
 
             let foundMatch = null;
-            if (level.words.includes(selectedWord) && !foundWords.includes(selectedWord)) {
-                foundMatch = selectedWord;
-            } else if (level.words.includes(reversedWord) && !foundWords.includes(reversedWord)) {
-                foundMatch = reversedWord;
-            }
+            if (level.words.includes(selectedWord) && !foundWords.includes(selectedWord)) foundMatch = selectedWord;
+            else if (level.words.includes(reversedWord) && !foundWords.includes(reversedWord)) foundMatch = reversedWord;
 
             if (foundMatch) {
                 foundWords.push(foundMatch);
                 selectedCells.forEach(cell => cell.classList.add('found'));
                 document.getElementById(`word-${foundMatch}`).classList.add('found');
-                
-                // Check Win Condition
-                if (foundWords.length === level.words.length) {
-                    winMessage.style.display = 'block';
-                }
+                if (foundWords.length === level.words.length) winMessage.style.display = 'block';
             }
-
             clearSelection();
         }
 
+        // DESKTOP DRAG EVENTS
+        function handleMouseDown(e) {
+            if (!window.matchMedia("(pointer: fine)").matches) return; 
+            isSelecting = true;
+            startCell = e.target;
+            clearSelection();
+            selectCell(startCell);
+        }
+        function handleMouseEnter(e) {
+            if (!isSelecting) return;
+            processSelection(e.target);
+        }
+        function handleMouseUp() {
+            if (!isSelecting) return;
+            isSelecting = false;
+            checkWordMatch();
+            startCell = null;
+        }
+
+        // MOBILE DRAG FALLBACKS
+        function getCellFromTouch(e) {
+            const touch = e.touches[0];
+            const element = document.elementFromPoint(touch.clientX, touch.clientY);
+            if (element && element.classList.contains('cell')) return element;
+            return null;
+        }
+        function handleTouchStart(e) {
+            const cell = getCellFromTouch(e);
+            if(cell) {
+                isSelecting = true;
+                startCell = cell;
+                clearSelection();
+                selectCell(cell);
+            }
+        }
+        function handleTouchMove(e) {
+            if (!isSelecting) return;
+            e.preventDefault();
+            const currentCell = getCellFromTouch(e);
+            processSelection(currentCell);
+        }
+        function handleTouchEnd() {
+            if (!isSelecting) return;
+            isSelecting = false;
+            checkWordMatch();
+            startCell = null;
+        }
+
+        function selectCell(cell) {
+            if(!selectedCells.includes(cell)) {
+                cell.classList.add('selected');
+                selectedCells.push(cell);
+            }
+        }
+        function clearSelection() {
+            selectedCells.forEach(cell => cell.classList.remove('selected'));
+            selectedCells = [];
+        }
         function switchLevel(levelKey) {
             currentLevel = levelKey;
             document.getElementById('btn-raag').classList.toggle('active', levelKey === 'raag');
@@ -373,8 +423,7 @@
             initGame();
         }
 
-        // Run game on startup
         initGame();
     </script>
 </body>
-</html>
+</html>S
